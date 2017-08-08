@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import Synth from './synth/synth';
+import Synth from './components/synth/synth';
 
 class App extends Component {
+
   render() {
     return (
       <div className="App">
