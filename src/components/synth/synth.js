@@ -1,32 +1,54 @@
 import React from 'react'
 
-import Keyboard from './keyboard'
+import KeyboardContainer from './keyboard-container'
 
 export default class Synth extends React.Component {
   constructor (props) {
     super(props)
+
+    this.state = {
+      gain: 0,
+      oscFreq: 110
+    }
+
+    this.toggleMute = this.toggleMute.bind(this)
   }
 
   componentWillMount () {
     this.ac = new (window.AudioContext || window.webkitAudioContext)();
-    console.log(this.ac);
     this.osc = this.ac.createOscillator();
     this.gn = this.ac.createGain();
+    this.gn.gain.value = this.state.gain;
     this.osc.type = 'triangle';
     this.osc.start();
-    this.osc.frequency.value = 280;
+    this.osc.frequency.value = this.state.oscFreq * 4;
     this.lpf = this.ac.createBiquadFilter();
-    this.lpf.frequency.value = 550
+    this.lpf.frequency.value = 400
+    this.lpf.Q.value = 1000
     this.osc.connect(this.lpf);
     this.lpf.connect(this.gn);
     this.gn.connect(this.ac.destination);
   }
 
+  toggleMute (e) {
+    e.preventDefault();
+
+    if (this.gn) {
+      this.setState((prevState) => ({ gain: prevState.gain === 1 ? 0 : 1 }))
+    }
+  }
+
+  componentDidUpdate () {
+    this.gn.gain.value = this.state.gain
+    this.osc.frequency.value = this.state.oscFreq * this.props.keyboard.octave
+  }
+
   render () {
     return (
       <div>
-        <p>hi</p>
-        <Keyboard />
+        <p>NH-8080</p>
+        <div onClick={this.toggleMute}>Mute</div>
+        <KeyboardContainer />
       </div>
     );
   }
