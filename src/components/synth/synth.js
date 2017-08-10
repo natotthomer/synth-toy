@@ -2,7 +2,7 @@ import React from 'react'
 
 import KeyboardContainer from './keyboard-container'
 
-import { noteFrequency } from './../../utils/keyboard_utils'
+import { noteFrequency, frequencyFromNoteNumber } from './../../utils/keyboard_utils'
 
 export default class Synth extends React.Component {
   constructor (props) {
@@ -23,7 +23,7 @@ export default class Synth extends React.Component {
     this.gn.gain.value = this.state.gain
     this.osc.type = 'square'
     this.osc.start()
-    this.osc.frequency.value = this.state.oscFreq * 4
+    // this.osc.frequency.value = this.state.oscFreq * 4
     this.lpf = this.ac.createBiquadFilter()
     this.lpf.frequency.value = 400
     // this.lpf.Q.value = 1000
@@ -42,7 +42,21 @@ export default class Synth extends React.Component {
 
   componentDidUpdate () {
     this.gn.gain.value = this.state.gain
-    this.osc.frequency.value = noteFrequency(this.props.keyboard.octave)
+    // this.osc.frequency.value = noteFrequency(this.props.keyboard.octave)
+    if (this.props.keyboard.currentNote && this.props.keyboard.currentNote.note) {
+      this.noteOn()
+    }
+  }
+
+  noteOn() {
+  	let freq = frequencyFromNoteNumber(this.props.keyboard.currentNote.note);
+  	this.osc.frequency.value = freq;
+  	this.gn.gain.value = this.props.keyboard.currentNote.velocity / 127;
+  }
+
+  noteOff(midiNote, velocity) {
+  	this.osc.frequency.value = 0
+    this.gn.gain.value = 0
   }
 
   render () {

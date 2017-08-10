@@ -1,5 +1,7 @@
 import React from 'react'
 
+// import { frequencyFromNoteNumber } from './../../utils/keyboard_utils'
+
 export default class Keyboard extends React.Component {
   constructor (props) {
     super(props)
@@ -9,6 +11,7 @@ export default class Keyboard extends React.Component {
     this.registerMIDIAccess = this.registerMIDIAccess.bind(this)
     this.onMIDIAccessSuccess = this.onMIDIAccessSuccess.bind(this)
     this.renderDevices = this.renderDevices.bind(this)
+    this.onMIDIMessage = this.onMIDIMessage.bind(this)
   }
 
   componentDidMount () {
@@ -40,6 +43,11 @@ export default class Keyboard extends React.Component {
     const devices = []
     const inputs = midi.inputs.values()
     for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
+      input.value.onmidimessage = this.onMIDIMessage
+      // debugger
+      // input.addListener('noteon', 'all', function (e) {
+      //   console.log(e);
+      // })
       devices.push(input.value)
     }
     this.props.updateMIDIDevices(devices)
@@ -47,6 +55,32 @@ export default class Keyboard extends React.Component {
 
   onMIDIAccessFailure(error) {
     console.log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + error);
+  }
+
+  onMIDIMessage(message) {
+    let data = message.data; // this gives us our [command/channel, note, velocity] data.
+    //console.log('MIDI data', data); // MIDI data [144, 63, 73]
+  	// data = event.data
+    let cmd = data[0] >> 4
+    let channel = data[0] & 0xf
+    let message_type = data[0] & 0xf0 // channel agnostic message type. Thanks, Phil Burk.
+    let note = data[1]
+    let velocity = data[2]
+    // with pressure and tilt off
+    // note off: 128, cmd: 8
+    // note on: 144, cmd: 9
+    // pressure / tilt on
+    // pressure: 176, cmd 11:
+    // bend: 224, cmd: 14
+
+    switch (message_type) {
+      case 144: // noteOn message
+        this.props.noteOn(note, velocity);
+        break;
+      case 128: // noteOff message
+        this.props.noteOff(note, velocity);
+        break;
+    }
   }
 
   handleOctaveDown (e) {
@@ -62,18 +96,19 @@ export default class Keyboard extends React.Component {
   }
 
   renderDevices () {
-    console.log(this.props.keyboard.currentDevice);
-    return (
-      <div>
-        {this.props.keyboard.devices.map((device, idx) => {
-          return (
-            <div key={idx} onClick={() => this.props.selectMIDIDevice(device)}>
-              {device.name}
-            </div>
-          )
-        })}
-      </div>
-    )
+    if (this.props.keyboard.devices.length > 0) {
+      return (
+        <div>
+          {this.props.keyboard.devices.map((device, idx) => {
+            return (
+              <div key={idx} onClick={() => this.props.selectMIDIDevice(device)}>
+                {device.name}
+              </div>
+            )
+          })}
+        </div>
+      )
+    }
   }
 
   render () {

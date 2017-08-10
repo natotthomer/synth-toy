@@ -8,3 +8,7 @@ export const noteFrequency = (octave = 4) => {
   const n = octave * 12
   return f * Math.pow(a, n)
 }
+
+export const frequencyFromNoteNumber = note => {
+    return 440 * Math.pow(2, (note - 69) / 12);
+}
