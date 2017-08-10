@@ -1,10 +1,12 @@
 import {
-  CHANGE_OCTAVE, PRESS_KEY, RELEASE_KEY
+  CHANGE_OCTAVE, PRESS_KEY, RELEASE_KEY, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE
 } from './../constants/keyboard_constants'
 
 const _nullKeyboard = {
-  octave: -1,
-  keysPressed: {}
+  currentDevice: {},
+  devices: [],
+  keysPressed: {},
+  octave: -1
 }
 
 const KeyboardReducer = (state = _nullKeyboard, action) => {
@@ -24,6 +26,14 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
       const keysPressed = Object.assign({}, state.keysPressed)
       delete keysPressed[key.name]
       return Object.assign({}, state, {keysPressed})
+    }
+    case UPDATE_MIDI_DEVICES: {
+      const devices = action.devices
+      return Object.assign({}, state, {devices})
+    }
+    case SELECT_MIDI_DEVICE: {
+      const currentDevice = action.device
+      return Object.assign({}, currentDevice)
     }
     default:
       return state

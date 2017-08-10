@@ -46,7 +46,6 @@ export default class Synth extends React.Component {
   }
 
   render () {
-    console.log(this.osc.frequency.value);
     return (
       <div>
         <p>NH-8080</p>
