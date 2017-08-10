@@ -3,15 +3,15 @@ import {
 } from './../constants/keyboard_constants'
 
 const _nullKeyboard = {
-  octave: 4,
+  octave: -1,
   keysPressed: {}
 }
 
 const KeyboardReducer = (state = _nullKeyboard, action) => {
   switch (action.type) {
     case CHANGE_OCTAVE: {
-      const octave = action.octave;
-      return Object.assign({}, state, {octave});
+      const octave = action.octave
+      return Object.assign({}, state, {octave})
     }
     case PRESS_KEY: {
       const key = action.key

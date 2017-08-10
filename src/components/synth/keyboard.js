@@ -4,19 +4,19 @@ export default class Keyboard extends React.Component {
   constructor (props) {
     super(props)
 
-    this.handleOctaveUp = this.handleOctaveUp.bind(this);
-    this.handleOctaveDown = this.handleOctaveDown.bind(this);
+    this.handleOctaveUp = this.handleOctaveUp.bind(this)
+    this.handleOctaveDown = this.handleOctaveDown.bind(this)
   }
 
   componentDidMount () {
-    document.onkeypress = function(e) {
-      let charCode = (typeof e.which === "number") ? e.which : e.keyCode;
+    document.onkeypress = function (e) {
+      let charCode = (typeof e.which === 'number') ? e.which : e.keyCode
 
       let my_key = (charCode)
       if (charCode) {
-        alert("Character typed: " + String.fromCharCode(charCode));
+        alert('Character typed: ' + String.fromCharCode(charCode))
       }
-    };
+    }
   }
 
   handleOctaveDown (e) {
