@@ -9,8 +9,7 @@ export default class Synth extends React.Component {
     super(props)
 
     this.state = {
-      gain: 0,
-      oscFreq: 110
+      gain: 0
     }
 
     this.toggleMute = this.toggleMute.bind(this)
@@ -21,12 +20,11 @@ export default class Synth extends React.Component {
     this.osc = this.ac.createOscillator()
     this.gn = this.ac.createGain()
     this.gn.gain.value = this.state.gain
-    this.osc.type = 'square'
+    this.osc.type = 'sawtooth'
     this.osc.start()
-    // this.osc.frequency.value = this.state.oscFreq * 4
     this.lpf = this.ac.createBiquadFilter()
-    this.lpf.frequency.value = 400
-    // this.lpf.Q.value = 1000
+    this.lpf.frequency.value = 500
+    this.lpf.Q.value = 10
     this.osc.connect(this.lpf)
     this.lpf.connect(this.gn)
     this.gn.connect(this.ac.destination)
