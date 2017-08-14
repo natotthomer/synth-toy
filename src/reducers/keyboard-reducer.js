@@ -1,5 +1,6 @@
 import {
-  CHANGE_OCTAVE, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE, NOTE_ON, NOTE_OFF
+  CHANGE_OCTAVE, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE, NOTE_ON, NOTE_OFF,
+  TOGGLE_PORTAMENTO
 } from './../constants/keyboard_constants'
 
 const _nullKeyboard = {
@@ -7,7 +8,8 @@ const _nullKeyboard = {
   devices: [],
   keysPressed: {},
   octave: -1,
-  currentNote: {}
+  currentNote: {},
+  portamento: false
 }
 
 const KeyboardReducer = (state = _nullKeyboard, action) => {
@@ -34,6 +36,11 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
     case NOTE_OFF: {
       const currentNote = {}
       return Object.assign({}, state, {currentNote})
+    }
+    case TOGGLE_PORTAMENTO: {
+      const portamento = action.portamento
+      console.log(portamento);
+      return Object.assign({}, state, {portamento})
     }
     default:
       return state

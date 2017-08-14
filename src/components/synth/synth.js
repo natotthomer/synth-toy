@@ -15,6 +15,7 @@ export default class Synth extends React.Component {
     this.toggleMute = this.toggleMute.bind(this)
     this.noteOn = this.noteOn.bind(this)
     this.noteOff = this.noteOff.bind(this)
+    this.togglePortamento = this.togglePortamento.bind(this)
   }
 
   componentWillMount () {
@@ -25,8 +26,8 @@ export default class Synth extends React.Component {
     this.osc.type = 'sawtooth'
     this.osc.start()
     this.lpf = this.ac.createBiquadFilter()
-    this.lpf.frequency.value = 500
-    this.lpf.Q.value = 10
+    this.lpf.frequency.value = 5000
+    this.lpf.Q.value = 0
     this.osc.connect(this.lpf)
     this.lpf.connect(this.gn)
     this.gn.connect(this.ac.destination)
@@ -51,21 +52,37 @@ export default class Synth extends React.Component {
   }
 
   noteOn () {
-  	let freq = frequencyFromNoteNumber(this.props.keyboard.currentNote.note)
-  	this.osc.frequency.value = freq
+    const now = this.ac.currentTime
+  	const newPitchFrequency = frequencyFromNoteNumber(this.props.keyboard.currentNote.note)
+    this.osc.frequency.cancelScheduledValues(0)
+
+    if (this.props.keyboard.portamento) {
+      this.osc.frequency.value = newPitchFrequency
+    } else {
+      this.osc.frequency.setValueAtTime(newPitchFrequency, now)
+    }
+
   	this.gn.gain.value = this.props.keyboard.currentNote.velocity / 127
   }
 
   noteOff () {
-  	this.osc.frequency.value = 0
+    this.osc.frequency.value = 0
     this.gn.gain.value = 0
   }
 
+  togglePortamento (e) {
+    this.props.togglePortamento(!this.props.keyboard.portamento)
+  }
+
   render () {
+    const portamento = this.props.keyboard.portamento ? 'ON' : 'OFF'
     return (
       <div>
         <p>NH-8080</p>
         <div onClick={this.toggleMute}>Mute</div>
+        <div onClick={this.togglePortamento}>
+          {portamento}
+        </div>
         <KeyboardContainer />
       </div>
     )
