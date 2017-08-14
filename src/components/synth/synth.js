@@ -13,6 +13,8 @@ export default class Synth extends React.Component {
     }
 
     this.toggleMute = this.toggleMute.bind(this)
+    this.noteOn = this.noteOn.bind(this)
+    this.noteOff = this.noteOff.bind(this)
   }
 
   componentWillMount () {
@@ -43,16 +45,18 @@ export default class Synth extends React.Component {
     // this.osc.frequency.value = noteFrequency(this.props.keyboard.octave)
     if (this.props.keyboard.currentNote && this.props.keyboard.currentNote.note) {
       this.noteOn()
+    } else {
+      this.noteOff()
     }
   }
 
-  noteOn() {
-  	let freq = frequencyFromNoteNumber(this.props.keyboard.currentNote.note);
-  	this.osc.frequency.value = freq;
-  	this.gn.gain.value = this.props.keyboard.currentNote.velocity / 127;
+  noteOn () {
+  	let freq = frequencyFromNoteNumber(this.props.keyboard.currentNote.note)
+  	this.osc.frequency.value = freq
+  	this.gn.gain.value = this.props.keyboard.currentNote.velocity / 127
   }
 
-  noteOff(midiNote, velocity) {
+  noteOff () {
   	this.osc.frequency.value = 0
     this.gn.gain.value = 0
   }

@@ -29,15 +29,15 @@ export default class Keyboard extends React.Component {
   registerMIDIAccess () {
     if (navigator.requestMIDIAccess) {
       navigator.requestMIDIAccess({
-          sysex: false // this defaults to 'false' and we won't be covering sysex in this article.
-      }).then(this.onMIDIAccessSuccess, this.onMIDIFailure);
+        sysex: false // this defaults to 'false' and we won't be covering sysex in this article.
+      }).then(this.onMIDIAccessSuccess, this.onMIDIFailure)
     } else {
-        alert("No MIDI support in your browser.");
+      alert('No MIDI support in your browser.')
     }
   }
 
   // midi functions
-  onMIDIAccessSuccess(midi) {
+  onMIDIAccessSuccess (midi) {
     // the argument 'midi' is our raw MIDI data, inputs, outputs, and sysex status
 
     const devices = []
@@ -53,14 +53,12 @@ export default class Keyboard extends React.Component {
     this.props.updateMIDIDevices(devices)
   }
 
-  onMIDIAccessFailure(error) {
-    console.log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + error);
+  onMIDIAccessFailure (error) {
+    console.log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + error)
   }
 
-  onMIDIMessage(message) {
-    let data = message.data; // this gives us our [command/channel, note, velocity] data.
-    //console.log('MIDI data', data); // MIDI data [144, 63, 73]
-  	// data = event.data
+  onMIDIMessage (message) {
+    let data = message.data // this gives us our [command/channel, note, velocity] data.
     let cmd = data[0] >> 4
     let channel = data[0] & 0xf
     let message_type = data[0] & 0xf0 // channel agnostic message type. Thanks, Phil Burk.
@@ -75,11 +73,11 @@ export default class Keyboard extends React.Component {
 
     switch (message_type) {
       case 144: // noteOn message
-        this.props.noteOn(note, velocity);
-        break;
+        this.props.noteOn(note, velocity)
+        break
       case 128: // noteOff message
-        this.props.noteOff(note, velocity);
-        break;
+        this.props.noteOff(note, velocity)
+        break
     }
   }
 
