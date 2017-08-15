@@ -81,7 +81,6 @@ export default class Synth extends React.Component {
   }
 
   render () {
-    console.log(this.props.portamento);
     const portamento = this.props.portamento.enabled ? 'ON' : 'OFF'
     return (
       <div>

@@ -43,10 +43,6 @@ export default class Keyboard extends React.Component {
     const inputs = midi.inputs.values()
     for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
       input.value.onmidimessage = this.onMIDIMessage
-      // debugger
-      // input.addListener('noteon', 'all', function (e) {
-      //   console.log(e);
-      // })
       devices.push(input.value)
     }
     this.props.updateMIDIDevices(devices)
