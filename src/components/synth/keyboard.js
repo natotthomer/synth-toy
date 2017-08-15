@@ -18,7 +18,6 @@ export default class Keyboard extends React.Component {
     document.onkeypress = function (e) {
       let charCode = (typeof e.which === 'number') ? e.which : e.keyCode
 
-      let my_key = (charCode)
       if (charCode) {
         alert('Character typed: ' + String.fromCharCode(charCode))
       }
@@ -29,7 +28,7 @@ export default class Keyboard extends React.Component {
   registerMIDIAccess () {
     if (navigator.requestMIDIAccess) {
       navigator.requestMIDIAccess({
-        sysex: false // this defaults to 'false' and we won't be covering sysex in this article.
+        sysex: false
       }).then(this.onMIDIAccessSuccess, this.onMIDIFailure)
     } else {
       alert('No MIDI support in your browser.')
@@ -78,6 +77,7 @@ export default class Keyboard extends React.Component {
       case 128: // noteOff message
         this.props.noteOff(note, velocity)
         break
+
     }
   }
 

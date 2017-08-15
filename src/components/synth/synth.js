@@ -2,7 +2,7 @@ import React from 'react'
 
 import KeyboardContainer from './keyboard-container'
 
-import { noteFrequency, frequencyFromNoteNumber } from './../../utils/keyboard_utils'
+import { frequencyFromNoteNumber } from './../../utils/keyboard_utils'
 
 export default class Synth extends React.Component {
   constructor (props) {
