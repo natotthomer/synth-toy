@@ -66,7 +66,7 @@ export default class Synth extends React.Component {
   }
 
   noteOff () {
-    this.osc.frequency.value = 0
+    // this.osc.frequency.value = 0
     this.gn.gain.value = 0
   }
 
