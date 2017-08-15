@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import Synth from './synth'
-import { togglePortamento } from './../../actions/keyboard-actions'
+import { updatePortamento } from './../../actions/keyboard-actions'
 
 const mapStateToProps = ({ keyboard }) => {
   return {
@@ -10,7 +10,7 @@ const mapStateToProps = ({ keyboard }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  togglePortamento: portamento => dispatch(togglePortamento(portamento))
+  updatePortamento: (enabled, value) => dispatch(updatePortamento(enabled, value))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Synth)

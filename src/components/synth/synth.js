@@ -16,6 +16,7 @@ export default class Synth extends React.Component {
     this.noteOn = this.noteOn.bind(this)
     this.noteOff = this.noteOff.bind(this)
     this.togglePortamento = this.togglePortamento.bind(this)
+    this.handlePortamentoTimeChange = this.handlePortamentoTimeChange.bind(this)
   }
 
   componentWillMount () {
@@ -56,8 +57,8 @@ export default class Synth extends React.Component {
   	const newPitchFrequency = frequencyFromNoteNumber(this.props.keyboard.currentNote.note)
     this.osc.frequency.cancelScheduledValues(0)
 
-    if (this.props.keyboard.portamento) {
-      this.osc.frequency.value = newPitchFrequency
+    if (this.props.keyboard.portamento.enabled) {
+      this.osc.frequency.linearRampToValueAtTime(newPitchFrequency, now + parseFloat(this.props.keyboard.portamento.value))
     } else {
       this.osc.frequency.setValueAtTime(newPitchFrequency, now)
     }
@@ -66,22 +67,37 @@ export default class Synth extends React.Component {
   }
 
   noteOff () {
-    // this.osc.frequency.value = 0
     this.gn.gain.value = 0
   }
 
   togglePortamento (e) {
-    this.props.togglePortamento(!this.props.keyboard.portamento)
+    const value = this.props.keyboard.portamento.value
+    this.props.updatePortamento(!this.props.keyboard.portamento.enabled, value)
+  }
+
+  handlePortamentoTimeChange (e) {
+    const value = e.target.value
+    this.props.updatePortamento(this.props.keyboard.portamento.enabled, value)
   }
 
   render () {
-    const portamento = this.props.keyboard.portamento ? 'ON' : 'OFF'
+    console.log(this.props.keyboard.portamento);
+    const portamento = this.props.keyboard.portamento.enabled ? 'ON' : 'OFF'
     return (
       <div>
         <p>NH-8080</p>
         <div onClick={this.toggleMute}>Mute</div>
-        <div onClick={this.togglePortamento}>
-          {portamento}
+        <div>
+          <div onClick={this.togglePortamento}>
+            {portamento}
+          </div>
+          <input
+            type='range'
+            min='0'
+            max='1'
+            step='0.01'
+            onChange={this.handlePortamentoTimeChange}
+            value={this.props.keyboard.portamento.value} />
         </div>
         <KeyboardContainer />
       </div>
