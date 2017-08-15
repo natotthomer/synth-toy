@@ -57,8 +57,8 @@ export default class Synth extends React.Component {
   	const newPitchFrequency = frequencyFromNoteNumber(this.props.keyboard.currentNote.note)
     this.osc.frequency.cancelScheduledValues(0)
 
-    if (this.props.keyboard.portamento.enabled) {
-      this.osc.frequency.linearRampToValueAtTime(newPitchFrequency, now + parseFloat(this.props.keyboard.portamento.value))
+    if (this.props.portamento.enabled) {
+      this.osc.frequency.linearRampToValueAtTime(newPitchFrequency, now + parseFloat(this.props.portamento.value))
     } else {
       this.osc.frequency.setValueAtTime(newPitchFrequency, now)
     }
@@ -71,18 +71,18 @@ export default class Synth extends React.Component {
   }
 
   togglePortamento (e) {
-    const value = this.props.keyboard.portamento.value
-    this.props.updatePortamento(!this.props.keyboard.portamento.enabled, value)
+    const value = this.props.portamento.value
+    this.props.updatePortamento(!this.props.portamento.enabled, value)
   }
 
   handlePortamentoTimeChange (e) {
     const value = e.target.value
-    this.props.updatePortamento(this.props.keyboard.portamento.enabled, value)
+    this.props.updatePortamento(this.props.portamento.enabled, value)
   }
 
   render () {
-    console.log(this.props.keyboard.portamento);
-    const portamento = this.props.keyboard.portamento.enabled ? 'ON' : 'OFF'
+    console.log(this.props.portamento);
+    const portamento = this.props.portamento.enabled ? 'ON' : 'OFF'
     return (
       <div>
         <p>NH-8080</p>
@@ -97,7 +97,7 @@ export default class Synth extends React.Component {
             max='1'
             step='0.01'
             onChange={this.handlePortamentoTimeChange}
-            value={this.props.keyboard.portamento.value} />
+            value={this.props.portamento.value} />
         </div>
         <KeyboardContainer />
       </div>

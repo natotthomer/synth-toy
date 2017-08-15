@@ -1,11 +1,12 @@
 import { connect } from 'react-redux'
 
 import Synth from './synth'
-import { updatePortamento } from './../../actions/keyboard-actions'
+import { updatePortamento } from './../../actions/synth-actions'
 
-const mapStateToProps = ({ keyboard }) => {
+const mapStateToProps = ({ keyboard, synth }) => {
   return {
-    keyboard
+    keyboard,
+    ...synth
   }
 }
 
