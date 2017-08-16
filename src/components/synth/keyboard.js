@@ -68,10 +68,10 @@ export default class Keyboard extends React.Component {
 
     switch (message_type) {
       case 144: // noteOn message
-        this.props.noteOn(note, velocity)
+        this.props.keyDown(note, velocity)
         break
       case 128: // noteOff message
-        this.props.noteOff(note, velocity)
+        this.props.keyUp(note, velocity)
         break
 
     }

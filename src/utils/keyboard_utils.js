@@ -12,3 +12,90 @@ export const noteFrequency = (octave = 4) => {
 export const frequencyFromNoteNumber = note => {
   return 440 * Math.pow(2, (note - 69) / 12)
 }
+
+export class DoublyLinkedListNode {
+  constructor (data) {
+    this.data = data
+    this.next = null
+    this.last = null
+  }
+}
+
+export class DoublyLinkedList {
+  constructor () {
+    this.length = 0
+    this.head = null
+    this.tail = null
+  }
+
+  add (data) {
+    const newNode = new DoublyLinkedListNode(data)
+    console.log(this.length);
+    if (this.length === 0) {
+      console.log('add new');
+      this.head = newNode
+      this.tail = newNode
+      this.length++
+    } else {
+      console.log('try to add another');
+      console.log(this.findIndexByNoteNumber(data.note));
+      console.log(data);
+      if (this.findIndexByNoteNumber(data.note) === -1) { // check that the note doesn't already exist
+        console.log('add another');
+        this.tail.next = newNode
+        newNode.prev = this.tail
+        this.tail = newNode
+        this.length++
+      }
+    }
+  }
+
+  remove (index) {
+    if (index > -1 && index < this.length) {
+      let current = this.head
+      let i = 0
+
+      if (index === 0) {
+        this.head = current.next
+
+        if (!this.head) {
+          this.tail = null
+        } else {
+          this.head.prev = null
+        }
+      } else if (index === this.length - 1) {
+        current = this.tail
+        this.tail = current.prev
+        this.tail.next = null
+      } else {
+        while (i++ < index) {
+          current = current.next
+        }
+        current.prev.next = current.next
+      }
+      this.length--
+
+      return current.data
+    } else {
+      return null
+    }
+  }
+
+  findIndexByNoteNumber (noteNumber) {
+    if (this.length === 0) {
+      return -1
+    } else {
+      let currentNode = this.head
+      let index = 0
+
+      while (index < this.length) {
+        if (currentNode.data.note === noteNumber) {
+          return index
+        }
+        currentNode = currentNode.next
+        index++
+      }
+      return -1
+    }
+  }
+}

@@ -1,9 +1,8 @@
 import {
   CHANGE_OCTAVE, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE,
-  NOTE_ON, NOTE_OFF
+  KEY_DOWN, KEY_UP
 } from './../constants/keyboard_constants'
 import { store } from './../store'
-
 
 export const changeOctave = octave => store.dispatch({
   type: CHANGE_OCTAVE,
@@ -20,12 +19,14 @@ export const selectMIDIDevice = device => store.dispatch({
   device
 })
 
-export const noteOn = (note, velocity) => store.dispatch({
-  type: NOTE_ON,
+export const keyDown = (note, velocity) => store.dispatch({
+  type: KEY_DOWN,
   note,
   velocity
 })
 
-export const noteOff = () => store.dispatch({
-  type: NOTE_OFF
+export const keyUp = (note, velocity) => store.dispatch({
+  type: KEY_UP,
+  note,
+  velocity
 })

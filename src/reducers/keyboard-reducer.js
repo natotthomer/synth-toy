@@ -1,13 +1,15 @@
 import {
-  CHANGE_OCTAVE, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE, NOTE_ON, NOTE_OFF
+  CHANGE_OCTAVE, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE, KEY_DOWN, KEY_UP
 } from './../constants/keyboard_constants'
+
+import { DoublyLinkedList } from './../utils/keyboard_utils'
 
 const _nullKeyboard = {
   currentDevice: {},
   devices: [],
   keysPressed: {},
   octave: -1,
-  currentNote: {}
+  currentNote: new DoublyLinkedList()
 }
 
 const KeyboardReducer = (state = _nullKeyboard, action) => {
@@ -24,15 +26,21 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
       const currentDevice = action.device
       return Object.assign({}, state, {currentDevice})
     }
-    case NOTE_ON: {
-      const currentNote = {
+    case KEY_DOWN: {
+      const currentNote = state.currentNote
+      currentNote.add({
         note: action.note,
         velocity: action.velocity
-      }
+      })
       return Object.assign({}, state, {currentNote})
     }
-    case NOTE_OFF: {
-      const currentNote = {}
+    case KEY_UP: {
+      const currentNote = state.currentNote
+      // console.log(currentNote);
+      const index = currentNote.findIndexByNoteNumber(action.note)
+      // console.log(index);
+      currentNote.remove(index)
+      // console.log(currentNote);
       return Object.assign({}, state, {currentNote})
     }
     default:
