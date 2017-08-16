@@ -54,7 +54,6 @@ export default class Synth extends React.Component {
 
   noteOn () {
     const now = this.ac.currentTime
-    // console.log(this.props.keyboard.currentNote.tail);
   	const newPitchFrequency = frequencyFromNoteNumber(this.props.keyboard.currentNote.tail.data.note)
     this.osc.frequency.cancelScheduledValues(0)
 

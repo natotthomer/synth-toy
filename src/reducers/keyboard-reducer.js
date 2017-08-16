@@ -36,11 +36,8 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
     }
     case KEY_UP: {
       const currentNote = state.currentNote
-      // console.log(currentNote);
       const index = currentNote.findIndexByNoteNumber(action.note)
-      // console.log(index);
       currentNote.remove(index)
-      // console.log(currentNote);
       return Object.assign({}, state, {currentNote})
     }
     default:

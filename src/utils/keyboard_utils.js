@@ -30,18 +30,12 @@ export class DoublyLinkedList {
 
   add (data) {
     const newNode = new DoublyLinkedListNode(data)
-    console.log(this.length);
     if (this.length === 0) {
-      console.log('add new');
       this.head = newNode
       this.tail = newNode
       this.length++
     } else {
-      console.log('try to add another');
-      console.log(this.findIndexByNoteNumber(data.note));
-      console.log(data);
       if (this.findIndexByNoteNumber(data.note) === -1) { // check that the note doesn't already exist
-        console.log('add another');
         this.tail.next = newNode
         newNode.prev = this.tail
         this.tail = newNode
