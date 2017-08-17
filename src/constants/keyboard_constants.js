@@ -1,3 +1,6 @@
 export const CHANGE_OCTAVE = 'CHANGE_OCTAVE'
-export const PRESS_KEY = 'PRESS_KEY'
-export const RELEASE_KEY = 'RELEASE_KEY'
+export const UPDATE_MIDI_DEVICES = 'UPDATE_MIDI_DEVICES'
+export const SELECT_MIDI_DEVICE = 'SELECT_MIDI_DEVICE'
+export const KEY_DOWN = 'KEY_DOWN'
+export const KEY_UP = 'KEY_UP'
+export const PITCH_BEND = 'PITCH_BEND'

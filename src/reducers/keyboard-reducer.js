@@ -1,10 +1,17 @@
 import {
-  CHANGE_OCTAVE, PRESS_KEY, RELEASE_KEY
+  CHANGE_OCTAVE, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE, KEY_DOWN, KEY_UP,
+  PITCH_BEND
 } from './../constants/keyboard_constants'
 
+import { DoublyLinkedList } from './../utils/keyboard_utils'
+
 const _nullKeyboard = {
+  currentDevice: {},
+  devices: [],
+  keysPressed: {},
   octave: -1,
-  keysPressed: {}
+  currentNote: new DoublyLinkedList(),
+  pitchBend: 8191
 }
 
 const KeyboardReducer = (state = _nullKeyboard, action) => {
@@ -13,17 +20,31 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
       const octave = action.octave
       return Object.assign({}, state, {octave})
     }
-    case PRESS_KEY: {
-      const key = action.key
-      const keysPressed = Object.assign({}, state.keysPressed)
-      keysPressed[key.name] = key
-      return Object.assign({}, state, {keysPressed})
+    case UPDATE_MIDI_DEVICES: {
+      const devices = action.devices
+      return Object.assign({}, state, {devices})
     }
-    case RELEASE_KEY: {
-      const key = action.key
-      const keysPressed = Object.assign({}, state.keysPressed)
-      delete keysPressed[key.name]
-      return Object.assign({}, state, {keysPressed})
+    case SELECT_MIDI_DEVICE: {
+      const currentDevice = action.device
+      return Object.assign({}, state, {currentDevice})
+    }
+    case KEY_DOWN: {
+      const currentNote = state.currentNote
+      currentNote.add({
+        note: action.note,
+        velocity: action.velocity
+      })
+      return Object.assign({}, state, {currentNote})
+    }
+    case KEY_UP: {
+      const currentNote = state.currentNote
+      const index = currentNote.findIndexByNoteNumber(action.note)
+      currentNote.remove(index)
+      return Object.assign({}, state, {currentNote})
+    }
+    case PITCH_BEND: {
+      const pitchBend = action.value
+      return Object.assign({}, state, {pitchBend})
     }
     default:
       return state
