@@ -52,10 +52,9 @@ export class DoublyLinkedList {
   remove (index) {
     if (index > -1 && index < this.length) {
       let current = this.head
-      let i = 0
 
       if (index === 0) {
-        this.head = current.next
+        this.head = this.head.next
 
         if (!this.head) {
           this.tail = null
@@ -63,14 +62,14 @@ export class DoublyLinkedList {
           this.head.prev = null
         }
       } else if (index === this.length - 1) {
-        current = this.tail
-        this.tail = current.prev
+        this.tail = this.tail.prev
         this.tail.next = null
       } else {
-        while (i++ < index) {
+        for (let i = 0; i < index; i++) {
           current = current.next
         }
         current.prev.next = current.next
+        current.next.prev = current.prev
       }
       this.length--
 

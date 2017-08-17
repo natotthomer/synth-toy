@@ -1,4 +1,5 @@
 import React from 'react'
+import throttle from 'lodash/throttle'
 
 // import { frequencyFromNoteNumber } from './../../utils/keyboard_utils'
 
@@ -42,6 +43,7 @@ export default class Keyboard extends React.Component {
     const devices = []
     const inputs = midi.inputs.values()
     for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
+      // input.value.onmidimessage = throttle(this.onMIDIMessage, 1, {leading: true})
       input.value.onmidimessage = this.onMIDIMessage
       devices.push(input.value)
     }
@@ -65,7 +67,9 @@ export default class Keyboard extends React.Component {
     // pressure / tilt on
     // pressure: 176, cmd 11:
     // bend: 224, cmd: 14
-
+    // if (message_type === 144 || message_type === 128) {
+    //   console.log(message_type);
+    // }
     switch (message_type) {
       case 144: // noteOn message
         this.props.keyDown(note, velocity)
