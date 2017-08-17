@@ -40,10 +40,7 @@ export class DoublyLinkedList {
 
   add (data) {
     const newNode = new DoublyLinkedListNode(data)
-<<<<<<< HEAD
     let noteAdded = false
-=======
->>>>>>> db45da72383a511f3810c3180e758e165ab4e220
     if (this.length === 0) {
       this.head = newNode
       this.tail = newNode
