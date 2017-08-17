@@ -58,7 +58,7 @@ export default class Keyboard extends React.Component {
     let data = message.data // this gives us our [command/channel, note, velocity] data.
     let cmd = data[0] >> 4
     let channel = data[0] & 0xf
-    let message_type = data[0] & 0xf0 // channel agnostic message type. Thanks, Phil Burk.
+    let messageType = data[0] & 0xf0 // channel agnostic message type. Thanks, Phil Burk.
     let note = data[1]
     let velocity = data[2]
     // with pressure and tilt off
@@ -67,10 +67,8 @@ export default class Keyboard extends React.Component {
     // pressure / tilt on
     // pressure: 176, cmd 11:
     // bend: 224, cmd: 14
-    // if (message_type === 144 || message_type === 128) {
-    //   console.log(message_type);
-    // }
-    switch (message_type) {
+
+    switch (messageType) {
       case 144: // noteOn message
         this.props.keyDown(note, velocity)
         break

@@ -27,7 +27,6 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
       return Object.assign({}, state, {currentDevice})
     }
     case KEY_DOWN: {
-      console.log('in key down');
       const currentNote = state.currentNote
       currentNote.add({
         note: action.note,
@@ -36,12 +35,9 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
       return Object.assign({}, state, {currentNote})
     }
     case KEY_UP: {
-      console.log('in key up');
       const currentNote = state.currentNote
       const index = currentNote.findIndexByNoteNumber(action.note)
-      const hello = currentNote.remove(index)
-      console.log(hello);
-      console.log(currentNote.head);
+      currentNote.remove(index)
       return Object.assign({}, state, {currentNote})
     }
     default:
