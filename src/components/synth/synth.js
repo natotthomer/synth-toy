@@ -2,7 +2,7 @@ import React from 'react'
 
 import KeyboardContainer from './keyboard-container'
 
-import { frequencyFromNoteNumber } from './../../utils/keyboard_utils'
+import { frequencyFromNoteNumber, numberOfNotesToPitchBend } from './../../utils/keyboard_utils'
 
 export default class Synth extends React.Component {
   constructor (props) {
@@ -43,10 +43,19 @@ export default class Synth extends React.Component {
   }
 
   componentDidUpdate () {
+    const now = this.ac.currentTime
     this.gn.gain.value = this.state.gain
-    // this.osc.frequency.value = noteFrequency(this.props.keyboard.octave)
-    if (this.props.keyboard.currentNote.tail && this.props.keyboard.currentNote.tail.data.note) {
+
+    const { currentNote, pitchBend } = this.props.keyboard
+
+    if (currentNote.tail && currentNote.tail.data.note) {
       this.noteOn()
+      if (pitchBend) {
+        const noteDifferential = numberOfNotesToPitchBend(pitchBend)
+
+        const newFreq = frequencyFromNoteNumber(currentNote.tail.data.note + noteDifferential)
+        this.osc.frequency.setValueAtTime(newFreq, now)
+      }
     } else {
       this.noteOff()
     }

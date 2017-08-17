@@ -75,7 +75,14 @@ export default class Keyboard extends React.Component {
       case 128: // noteOff message
         this.props.keyUp(note, velocity)
         break
-
+      case 224:
+        const coarseTune = (data[2] << 7)
+        const fineTune = data[1]
+        const totalTune = coarseTune + fineTune
+        this.props.pitchBend(totalTune)
+        break
+      default:
+        break
     }
   }
 

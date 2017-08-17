@@ -1,6 +1,6 @@
 import {
   CHANGE_OCTAVE, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE,
-  KEY_DOWN, KEY_UP
+  KEY_DOWN, KEY_UP, PITCH_BEND
 } from './../constants/keyboard_constants'
 import { store } from './../store'
 
@@ -29,4 +29,9 @@ export const keyUp = (note, velocity) => store.dispatch({
   type: KEY_UP,
   note,
   velocity
+})
+
+export const pitchBend = value => store.dispatch({
+  type: PITCH_BEND,
+  value
 })

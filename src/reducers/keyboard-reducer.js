@@ -1,5 +1,6 @@
 import {
-  CHANGE_OCTAVE, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE, KEY_DOWN, KEY_UP
+  CHANGE_OCTAVE, UPDATE_MIDI_DEVICES, SELECT_MIDI_DEVICE, KEY_DOWN, KEY_UP,
+  PITCH_BEND
 } from './../constants/keyboard_constants'
 
 import { DoublyLinkedList } from './../utils/keyboard_utils'
@@ -9,7 +10,8 @@ const _nullKeyboard = {
   devices: [],
   keysPressed: {},
   octave: -1,
-  currentNote: new DoublyLinkedList()
+  currentNote: new DoublyLinkedList(),
+  pitchBend: 8191
 }
 
 const KeyboardReducer = (state = _nullKeyboard, action) => {
@@ -39,6 +41,10 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
       const index = currentNote.findIndexByNoteNumber(action.note)
       currentNote.remove(index)
       return Object.assign({}, state, {currentNote})
+    }
+    case PITCH_BEND: {
+      const pitchBend = action.value
+      return Object.assign({}, state, {pitchBend})
     }
     default:
       return state

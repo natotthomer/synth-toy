@@ -13,6 +13,16 @@ export const frequencyFromNoteNumber = note => {
   return 440 * Math.pow(2, (note - 69) / 12)
 }
 
+export const numberOfNotesToPitchBend = pitchBend => {
+  // -1 represents two (2) half-steps down
+  // 1 represents two (2) half-steps up
+  // for every +/- 0.500, increase or decrease the note value by 1
+  // Here, we map all the numbers from 0-16383 against all the corresponding
+  // values between -1 & 1
+  const normalizedValue = parseFloat((((pitchBend - (0)) / (16383 - (0)) * (1 - (-1))) + (-1)).toFixed(3))
+  return normalizedValue * 2
+}
+
 export class DoublyLinkedListNode {
   constructor (data) {
     this.data = data
