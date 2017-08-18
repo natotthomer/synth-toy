@@ -125,6 +125,9 @@ export default class Keyboard extends React.Component {
             octave up
           </div>
         </div>
+        <div onClick={this.registerMIDIAccess}>
+          Detect Devices
+        </div>
 
         <div id='device-list'>
           {this.renderDevices()}
