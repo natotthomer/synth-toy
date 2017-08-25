@@ -46,16 +46,10 @@ export default class Synth extends React.Component {
     const now = this.ac.currentTime
     this.gn.gain.value = this.state.gain
 
-    const { currentNote, pitchBend } = this.props.keyboard
+    const { currentNotes } = this.props.keyboard
 
-    if (currentNote.tail && currentNote.tail.data.note) {
+    if (currentNotes.tail && currentNotes.tail.data.nativeNote) {
       this.noteOn()
-      if (pitchBend) {
-        const noteDifferential = numberOfNotesToPitchBend(pitchBend)
-
-        const newFreq = frequencyFromNoteNumber(currentNote.tail.data.note + noteDifferential)
-        this.osc.frequency.setValueAtTime(newFreq, now)
-      }
     } else {
       this.noteOff()
     }
@@ -63,7 +57,7 @@ export default class Synth extends React.Component {
 
   noteOn () {
     const now = this.ac.currentTime
-  	const newPitchFrequency = frequencyFromNoteNumber(this.props.keyboard.currentNote.tail.data.note)
+  	const newPitchFrequency = frequencyFromNoteNumber(this.props.keyboard.currentNotes.tail.data.modulatedNote)
     this.osc.frequency.cancelScheduledValues(0)
 
     if (this.props.portamento.enabled) {
@@ -72,7 +66,7 @@ export default class Synth extends React.Component {
       this.osc.frequency.setValueAtTime(newPitchFrequency, now)
     }
 
-  	this.gn.gain.value = this.props.keyboard.currentNote.tail.data.velocity / 127
+  	this.gn.gain.value = this.props.keyboard.currentNotes.tail.data.velocity / 127
   }
 
   noteOff () {

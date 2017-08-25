@@ -46,7 +46,7 @@ export class DoublyLinkedList {
       this.tail = newNode
       noteAdded = true
     } else {
-      if (this.findIndexByNoteNumber(data.note) === -1) { // check that the note doesn't already exist
+      if (this.findIndexByNoteNumber(data.nativeNote) === -1) { // check that the note doesn't already exist
         this.tail.next = newNode
         newNode.prev = this.tail
         this.tail = newNode
@@ -89,6 +89,20 @@ export class DoublyLinkedList {
     }
   }
 
+  pitchBend (pitchBend) {
+    if (this.length > 0) {
+      let index = 0
+      let current = this.head
+      while (index < this.length) {
+        current.data.modulatedNote = current.data.nativeNote + numberOfNotesToPitchBend(pitchBend)
+        index++
+        if (current.next) {
+          current = current.next
+        }
+      }
+    }
+  }
+
   findIndexByNoteNumber (noteNumber) {
     if (this.length === 0) {
       return -1
@@ -97,7 +111,7 @@ export class DoublyLinkedList {
       let index = 0
 
       while (index < this.length) {
-        if (currentNode.data.note === noteNumber) {
+        if (currentNode.data.nativeNote === noteNumber) {
           return index
         }
         currentNode = currentNode.next

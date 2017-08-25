@@ -3,14 +3,14 @@ import {
   PITCH_BEND
 } from './../constants/keyboard_constants'
 
-import { DoublyLinkedList } from './../utils/keyboard_utils'
+import { DoublyLinkedList, numberOfNotesToPitchBend } from './../utils/keyboard_utils'
 
 const _nullKeyboard = {
   currentDevice: {},
   devices: [],
   keysPressed: {},
   octave: -1,
-  currentNote: new DoublyLinkedList(),
+  currentNotes: new DoublyLinkedList(),
   pitchBend: 8191
 }
 
@@ -29,22 +29,25 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
       return Object.assign({}, state, {currentDevice})
     }
     case KEY_DOWN: {
-      const currentNote = state.currentNote
-      currentNote.add({
-        note: action.note,
-        velocity: action.velocity
+      const currentNotes = state.currentNotes
+      currentNotes.add({
+        nativeNote: action.note,
+        velocity: action.velocity,
+        modulatedNote: action.note + numberOfNotesToPitchBend(state.pitchBend)
       })
-      return Object.assign({}, state, {currentNote})
+      return Object.assign({}, state, {currentNotes})
     }
     case KEY_UP: {
-      const currentNote = state.currentNote
-      const index = currentNote.findIndexByNoteNumber(action.note)
-      currentNote.remove(index)
-      return Object.assign({}, state, {currentNote})
+      const currentNotes = state.currentNotes
+      const index = currentNotes.findIndexByNoteNumber(action.note)
+      currentNotes.remove(index)
+      return Object.assign({}, state, {currentNotes})
     }
     case PITCH_BEND: {
       const pitchBend = action.value
-      return Object.assign({}, state, {pitchBend})
+      const currentNotes = state.currentNotes
+      currentNotes.pitchBend(pitchBend)
+      return Object.assign({}, state, {currentNotes}, {pitchBend})
     }
     default:
       return state
