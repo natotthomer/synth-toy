@@ -8,7 +8,6 @@ import { DoublyLinkedList, numberOfNotesToPitchBend } from './../utils/keyboard_
 const _nullKeyboard = {
   currentDevice: {},
   devices: [],
-  keysPressed: {},
   octave: -1,
   currentNotes: new DoublyLinkedList(),
   trigger: false,

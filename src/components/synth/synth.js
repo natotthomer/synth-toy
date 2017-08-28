@@ -2,7 +2,7 @@ import React from 'react'
 
 import KeyboardContainer from './keyboard-container'
 import Input from './input'
-import { frequencyFromNoteNumber, numberOfNotesToPitchBend } from './../../utils/keyboard_utils'
+import { frequencyFromNoteNumber } from './../../utils/keyboard_utils'
 
 export default class Synth extends React.Component {
   constructor (props) {
@@ -45,8 +45,6 @@ export default class Synth extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const now = this.ac.currentTime
-
     const { currentNotes } = this.props.keyboard
 
     if (currentNotes.tail && currentNotes.tail.data.nativeNote) {
@@ -104,7 +102,6 @@ export default class Synth extends React.Component {
   }
 
   render () {
-    const portamento = this.props.portamento.enabled ? 'ON' : 'OFF'
     return (
       <div>
         <p>NH-8080</p>

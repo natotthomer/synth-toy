@@ -1,7 +1,4 @@
 import React from 'react'
-import throttle from 'lodash/throttle'
-
-// import { frequencyFromNoteNumber } from './../../utils/keyboard_utils'
 
 export default class Keyboard extends React.Component {
   constructor (props) {
