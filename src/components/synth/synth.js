@@ -59,6 +59,7 @@ export default class Synth extends React.Component {
     const now = this.ac.currentTime
   	const newPitchFrequency = frequencyFromNoteNumber(this.props.keyboard.currentNotes.tail.data.modulatedNote)
     this.osc.frequency.cancelScheduledValues(0)
+    this.gn.gain.cancelScheduledValues(0)
 
     if (this.props.portamento.enabled) {
       this.osc.frequency.linearRampToValueAtTime(newPitchFrequency, now + parseFloat(this.props.portamento.value))
@@ -66,11 +67,13 @@ export default class Synth extends React.Component {
       this.osc.frequency.setValueAtTime(newPitchFrequency, now)
     }
 
-  	this.gn.gain.value = this.props.keyboard.currentNotes.tail.data.velocity / 127
+  	const velocityAdjustedGain = this.props.keyboard.currentNotes.tail.data.velocity / 127
+    this.gn.gain.linearRampToValueAtTime(velocityAdjustedGain, now + 0.5)
   }
 
   noteOff () {
-    this.gn.gain.value = 0
+    const now = this.ac.currentTime
+    this.gn.gain.linearRampToValueAtTime(0, now + 0.5)
   }
 
   togglePortamento (e) {
