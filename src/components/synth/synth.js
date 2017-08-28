@@ -44,11 +44,18 @@ export default class Synth extends React.Component {
     }
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentWillUpdate (nextProps, nextState) {
+    console.log(nextProps.keyboard.currentNotes.tail === null);
     const { currentNotes } = this.props.keyboard
-
-    if (currentNotes.tail && currentNotes.tail.data.nativeNote) {
-      this.noteOn()
+    const { currentNotes: nextNotes } = nextProps.keyboard
+    console.log(currentNotes);
+    console.log(nextNotes);
+    if (currentNotes.tail) {
+      console.log('hello!');
+      console.log(nextNotes.tail.data);
+      if (!nextNotes.tail.data || nextNotes.tail.data.nativeNote !== currentNotes.tail.data.nativeNote) {
+        this.noteOn()
+      }
     } else {
       this.noteOff()
     }
