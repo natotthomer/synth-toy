@@ -11,6 +11,7 @@ const _nullKeyboard = {
   keysPressed: {},
   octave: -1,
   currentNotes: new DoublyLinkedList(),
+  trigger: false,
   pitchBend: 8191
 }
 
@@ -35,13 +36,15 @@ const KeyboardReducer = (state = _nullKeyboard, action) => {
         velocity: action.velocity,
         modulatedNote: action.note + numberOfNotesToPitchBend(state.pitchBend)
       })
-      return Object.assign({}, state, {currentNotes})
+      const trigger = true
+      return Object.assign({}, state, {currentNotes}, {trigger})
     }
     case KEY_UP: {
       const currentNotes = state.currentNotes
       const index = currentNotes.findIndexByNoteNumber(action.note)
       currentNotes.remove(index)
-      return Object.assign({}, state, {currentNotes})
+      const trigger = currentNotes.length > 0 ? true : false
+      return Object.assign({}, state, {currentNotes}, {trigger})
     }
     case PITCH_BEND: {
       const pitchBend = action.value

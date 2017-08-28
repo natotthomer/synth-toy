@@ -1,14 +1,16 @@
 import React from 'react'
 
 const Input = (props) => {
+  
+
   return (
     <div>
       <span>{props.visibleName}</span>
       <input
         type='range'
-        min='0'
-        max='1'
-        step='0.01'
+        min={props.min}
+        max={props.max}
+        step={props.step}
         className='standard-slider'
         onChange={props.onChange}
         value={props.value} />

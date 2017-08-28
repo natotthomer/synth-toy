@@ -17,13 +17,15 @@ export default class Synth extends React.Component {
     this.noteOff = this.noteOff.bind(this)
     this.togglePortamento = this.togglePortamento.bind(this)
     this.handlePortamentoTimeChange = this.handlePortamentoTimeChange.bind(this)
+    this.handleAttackChange = this.handleAttackChange.bind(this)
+    this.handleReleaseChange = this.handleReleaseChange.bind(this)
   }
 
   componentWillMount () {
     this.ac = new (window.AudioContext || window.webkitAudioContext)()
     this.osc = this.ac.createOscillator()
     this.gn = this.ac.createGain()
-    this.gn.gain.value = this.state.gain
+    this.gn.gain.value = 0
     this.osc.type = 'sawtooth'
     this.osc.start()
     this.lpf = this.ac.createBiquadFilter()
@@ -42,9 +44,8 @@ export default class Synth extends React.Component {
     }
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps, prevState) {
     const now = this.ac.currentTime
-    this.gn.gain.value = this.state.gain
 
     const { currentNotes } = this.props.keyboard
 
@@ -56,10 +57,10 @@ export default class Synth extends React.Component {
   }
 
   noteOn () {
+    console.log('note on');
     const now = this.ac.currentTime
   	const newPitchFrequency = frequencyFromNoteNumber(this.props.keyboard.currentNotes.tail.data.modulatedNote)
-    this.osc.frequency.cancelScheduledValues(0)
-    this.gn.gain.cancelScheduledValues(0)
+    this.osc.frequency.cancelScheduledValues(now)
 
     if (this.props.portamento.enabled) {
       this.osc.frequency.linearRampToValueAtTime(newPitchFrequency, now + parseFloat(this.props.portamento.value))
@@ -68,12 +69,18 @@ export default class Synth extends React.Component {
     }
 
   	const velocityAdjustedGain = this.props.keyboard.currentNotes.tail.data.velocity / 127
-    this.gn.gain.linearRampToValueAtTime(velocityAdjustedGain, now + 0.5)
+    this.gn.gain.cancelScheduledValues(now)
+    // this.gn.gain.setValueAtTime(0, now)
+    this.gn.gain.linearRampToValueAtTime(velocityAdjustedGain, now + this.props.attack)
   }
 
   noteOff () {
+    console.log('note off');
     const now = this.ac.currentTime
-    this.gn.gain.linearRampToValueAtTime(0, now + 0.5)
+    this.gn.gain.cancelScheduledValues(now)
+    this.gn.gain.setValueAtTime(this.gn.gain.value, now)
+    this.gn.gain.linearRampToValueAtTime(0, now + this.props.release)
+    // this.gn.gain.setTargetAtTime(0, now, 5)
   }
 
   togglePortamento (e) {
@@ -86,6 +93,16 @@ export default class Synth extends React.Component {
     this.props.updatePortamento(this.props.portamento.enabled, value)
   }
 
+  handleAttackChange (e) {
+    const value = e.target.value
+    this.props.updateAttack(parseFloat(value))
+  }
+
+  handleReleaseChange (e) {
+    const value = e.target.value
+    this.props.updateRelease(parseFloat(value))
+  }
+
   render () {
     const portamento = this.props.portamento.enabled ? 'ON' : 'OFF'
     return (
@@ -94,9 +111,26 @@ export default class Synth extends React.Component {
         <div onClick={this.toggleMute}>Mute</div>
         <div>
           <Input
+          min={0}
+          max={1}
+          step={0.01}
             visibleName={'Portamento Amount'}
             onChange={this.handlePortamentoTimeChange}
             value={this.props.portamento.value} />
+          <Input
+            min={0}
+            max={20}
+            step={0.01}
+            visibleName={'Attack Amount'}
+            onChange={this.handleAttackChange}
+            value={this.props.attack} />
+          <Input
+            min={0}
+            max={20}
+            step={0.01}
+            visibleName={'Release Amount'}
+            onChange={this.handleReleaseChange}
+            value={this.props.release} />
         </div>
         <KeyboardContainer />
       </div>

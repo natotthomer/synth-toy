@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import Synth from './synth'
-import { updatePortamento } from './../../actions/synth-actions'
+import { updatePortamento, updateAttack, updateRelease } from './../../actions/synth-actions'
 
 const mapStateToProps = ({ keyboard, synth }) => {
   return {
@@ -11,7 +11,9 @@ const mapStateToProps = ({ keyboard, synth }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  updatePortamento: (enabled, value) => dispatch(updatePortamento(enabled, value))
+  updatePortamento: (enabled, value) => dispatch(updatePortamento(enabled, value)),
+  updateAttack: value => dispatch(updateAttack(value)),
+  updateRelease: value => dispatch(updateRelease(value))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Synth)
