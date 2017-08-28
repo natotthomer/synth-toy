@@ -2,7 +2,7 @@ import { UPDATE_PORTAMENTO } from './../constants/synth-constants'
 
 const _nullSynth = {
   portamento: {
-    enabled: false,
+    enabled: true,
     value: 0
   }
 }

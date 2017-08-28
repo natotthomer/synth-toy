@@ -1,7 +1,7 @@
 import React from 'react'
 
 import KeyboardContainer from './keyboard-container'
-
+import Input from './input'
 import { frequencyFromNoteNumber, numberOfNotesToPitchBend } from './../../utils/keyboard_utils'
 
 export default class Synth extends React.Component {
@@ -93,14 +93,8 @@ export default class Synth extends React.Component {
         <p>NH-8080</p>
         <div onClick={this.toggleMute}>Mute</div>
         <div>
-          <div onClick={this.togglePortamento}>
-            {portamento}
-          </div>
-          <input
-            type='range'
-            min='0'
-            max='1'
-            step='0.01'
+          <Input
+            visibleName={'Portamento Amount'}
             onChange={this.handlePortamentoTimeChange}
             value={this.props.portamento.value} />
         </div>
