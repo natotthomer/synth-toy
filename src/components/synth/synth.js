@@ -117,7 +117,7 @@ export default class Synth extends React.Component {
           <Input
           min={0}
           max={1}
-          step={0.01}
+          step={0.001}
             visibleName={'Portamento Amount'}
             onChange={this.handlePortamentoTimeChange}
             value={this.props.portamento.value} />
