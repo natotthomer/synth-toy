@@ -23,6 +23,16 @@
   to { transform: rotate(360deg); }
 }
 
+.main-slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.synth-input {
+  width: 30rem;
+}
+
 .standard-slider {
   cursor: pointer;
 }

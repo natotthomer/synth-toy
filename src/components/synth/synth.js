@@ -113,7 +113,7 @@ export default class Synth extends React.Component {
       <div>
         <p>NH-8080</p>
         <div onClick={this.toggleMute}>Mute</div>
-        <div>
+        <div className='main-slider-container'>
           <Input
           min={0}
           max={1}

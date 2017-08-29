@@ -1,10 +1,10 @@
 import React from 'react'
 
 const Input = (props) => {
-  
+
 
   return (
-    <div>
+    <div className='synth-input'>
       <span>{props.visibleName}</span>
       <input
         type='range'
