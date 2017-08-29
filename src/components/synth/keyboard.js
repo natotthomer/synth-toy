@@ -44,7 +44,7 @@ export default class Keyboard extends React.Component {
       input.value.onmidimessage = this.onMIDIMessage
       devices.push(input.value)
     }
-    this.props.updateMIDIDevices(devices)
+    // this.props.updateMIDIDevices(devices)
   }
 
   onMIDIAccessFailure (error) {
