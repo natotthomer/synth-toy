@@ -4,12 +4,17 @@ export default class Keyboard extends React.Component {
   constructor (props) {
     super(props)
 
+    this.state = {
+      currentDevice: 'keyboard'
+    }
+
     this.handleOctaveUp = this.handleOctaveUp.bind(this)
     this.handleOctaveDown = this.handleOctaveDown.bind(this)
     this.registerMIDIAccess = this.registerMIDIAccess.bind(this)
     this.onMIDIAccessSuccess = this.onMIDIAccessSuccess.bind(this)
     this.renderDevices = this.renderDevices.bind(this)
     this.onMIDIMessage = this.onMIDIMessage.bind(this)
+    this.handleCurrentDeviceChange = this.handleCurrentDeviceChange.bind(this)
   }
 
   componentDidMount () {
@@ -44,7 +49,7 @@ export default class Keyboard extends React.Component {
       input.value.onmidimessage = this.onMIDIMessage
       devices.push(input.value)
     }
-    // this.props.updateMIDIDevices(devices)
+    this.props.updateMIDIDevices(devices)
   }
 
   onMIDIAccessFailure (error) {
@@ -52,34 +57,38 @@ export default class Keyboard extends React.Component {
   }
 
   onMIDIMessage (message) {
-    let data = message.data // this gives us our [command/channel, note, velocity] data.
-    let cmd = data[0] >> 4
-    let channel = data[0] & 0xf
-    let messageType = data[0] & 0xf0 // channel agnostic message type. Thanks, Phil Burk.
-    let note = data[1]
-    let velocity = data[2]
-    // with pressure and tilt off
-    // note off: 128, cmd: 8
-    // note on: 144, cmd: 9
-    // pressure / tilt on
-    // pressure: 176, cmd 11:
-    // bend: 224, cmd: 14
+    const device = message.target
 
-    switch (messageType) {
-      case 144: // noteOn message
-        this.props.keyDown(note, velocity)
-        break
-      case 128: // noteOff message
-        this.props.keyUp(note, velocity)
-        break
-      case 224:
-        const coarseTune = (data[2] << 7)
-        const fineTune = data[1]
-        const totalTune = coarseTune + fineTune
-        this.props.pitchBend(totalTune)
-        break
-      default:
-        break
+    if (device.name === this.props.keyboard.currentDevice) {
+      const data = message.data // this gives us our [command/channel, note, velocity] data.
+      const cmd = data[0] >> 4
+      const channel = data[0] & 0xf
+      const messageType = data[0] & 0xf0 // channel agnostic message type. Thanks, Phil Burk.
+      const note = data[1]
+      const velocity = data[2]
+      // with pressure and tilt off
+      // note off: 128, cmd: 8
+      // note on: 144, cmd: 9
+      // pressure / tilt on
+      // pressure: 176, cmd 11:
+      // bend: 224, cmd: 14
+
+      switch (messageType) {
+        case 144: // noteOn message
+          this.props.keyDown(note, velocity)
+          break
+        case 128: // noteOff message
+          this.props.keyUp(note, velocity)
+          break
+        case 224:
+          const coarseTune = (data[2] << 7)
+          const fineTune = data[1]
+          const totalTune = coarseTune + fineTune
+          this.props.pitchBend(totalTune)
+          break
+        default:
+          break
+      }
     }
   }
 
@@ -95,18 +104,27 @@ export default class Keyboard extends React.Component {
     this.props.changeOctave(this.props.keyboard.octave + 1)
   }
 
+  handleCurrentDeviceChange (e) {
+    e.preventDefault()
+
+    this.props.selectMIDIDevice(e.target.value)
+      .then(this.setState({ currentDevice: e.target.value }))
+  }
+
   renderDevices () {
     if (this.props.keyboard.devices.length > 0) {
       return (
-        <div>
+        <select value={this.state.currentDevice} onChange={this.handleCurrentDeviceChange}>
+          <option value={'keyboard'}>Keyboard</option>
           {this.props.keyboard.devices.map((device, idx) => {
+
             return (
-              <div key={idx} onClick={() => this.props.selectMIDIDevice(device)}>
+              <option value={device.name} key={idx}>
                 {device.name}
-              </div>
+              </option>
             )
           })}
-        </div>
+        </select>
       )
     }
   }

@@ -3,19 +3,18 @@ import thunk from 'redux-thunk'
 
 import rootReducer from './reducers/root-reducer'
 
-// export const store = createStore(
-//   rootReducer,
-//   applyMiddleware(thunk)
-// )
-
 const addPromiseSupportToDispatch = store => {
   const rawDispatch = store.dispatch
 
   return (action) => {
+
     if (typeof action.then === 'function') {
       return action.then(rawDispatch)
+    } else {
+      return new Promise((resolve, reject) => {
+        resolve(rawDispatch(action))
+      })
     }
-    return rawDispatch(action)
   }
 }
 

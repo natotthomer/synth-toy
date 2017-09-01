@@ -15,18 +15,21 @@ const registerKeyDown = (note, velocity) => ({
 //   octave
 // })
 //
-// export const updateMIDIDevices = devices => Store.dispatch({
-//   type: UPDATE_MIDI_DEVICES,
-//   devices
-// })
-//
-// export const selectMIDIDevice = device => Store.dispatch({
-//   type: SELECT_MIDI_DEVICE,
-//   device
-// })
+export const updateMIDIDevices = devices => dispatch => dispatch({
+  type: UPDATE_MIDI_DEVICES,
+  devices
+})
 
-export const keyDown = (note, velocity) => dispatch => dispatch(registerKeyDown(note, velocity))
-  .then(() => console.log('hi'))
+export const selectMIDIDevice = device => dispatch => dispatch({
+  type: SELECT_MIDI_DEVICE,
+  device
+})
+
+export const keyDown = (note, velocity) => dispatch => dispatch({
+  type: KEY_DOWN,
+  note,
+  velocity
+})
 
 export const keyUp = (note, velocity) => dispatch => dispatch({
   type: KEY_UP,
